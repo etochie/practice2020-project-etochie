@@ -5,10 +5,12 @@ from apps.test.models import Test
 from apps.test.serializers import TestSerializer
 
 
-class TestViewSet(mixins.CreateModelMixin,
-                  mixins.ListModelMixin,
-                  mixins.RetrieveModelMixin,
-                  GenericViewSet):
+class TestViewSet(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    GenericViewSet
+):
     """
     A viewset that provides `create`, `list` and `retrieve` actions
     """
