@@ -2,7 +2,6 @@
 /server/staticfiles
 /server/media
 /server/config/settings/api_keys.py
-server/config/migrations/core
 .DS_Store
 .idea
 .vscode
