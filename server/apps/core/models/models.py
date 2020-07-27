@@ -1,5 +1,7 @@
 from django.db import models
+from rest_framework.exceptions import APIException
 from yandex_geocoder import Client
+from yandex_geocoder import exceptions
 
 from config.settings.api_keys import YANDEX_GEOCODER_KEY
 
@@ -44,7 +46,12 @@ class Cafe(models.Model):
     def get_coords(self):
         """Возвращает координаты заведения (долгота, широта)"""
         client = Client(YANDEX_GEOCODER_KEY)
-        coord = client.coordinates(self.address)
+        try:
+            coord = client.coordinates(self.address)
+        except Exception:
+            raise APIException(
+                'Невозможно определить координаты заведения. Проверьте правильность адреса.'
+            )
         return coord
 
     def save(self, *args, **kwargs):
