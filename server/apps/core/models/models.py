@@ -1,7 +1,6 @@
 from django.db import models
 from rest_framework.exceptions import APIException
 from yandex_geocoder import Client
-from yandex_geocoder import exceptions
 
 from config.settings.api_keys import YANDEX_GEOCODER_KEY
 
