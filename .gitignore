@@ -1,6 +1,7 @@
 /client/build
 /server/staticfiles
 /server/media
+/server/config/settings/api_keys.py
 .DS_Store
 .idea
 .vscode
