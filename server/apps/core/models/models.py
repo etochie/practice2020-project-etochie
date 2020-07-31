@@ -61,12 +61,12 @@ class Cafe(models.Model):
         if self.dishes:
             total = 0
             values = self.dishes.values()
-            count = len(values)
+            count = self.dishes.count()
             for obj in values:
                 total += obj['price']
             try:
                 average = total / count
-            except Exception:
+            except ZeroDivisionError:
                 average = 0
             return average
 
@@ -114,12 +114,12 @@ class Dish(models.Model):
         if self.ingredients:
             temp = 0
             values = self.ingredients.values()
-            count = len(values)
+            count = self.ingredients.count()
             for obj in values:
                 temp += obj['calorie_content']
             try:
                 calories = temp / count
-            except Exception:
+            except ZeroDivisionError:
                 calories = 0
             return calories
 

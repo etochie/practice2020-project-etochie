@@ -10,7 +10,7 @@ def generate_average_cost_dish(sender, instance, **kwargs):
     Сигнал расчета и сохранения средней стоимости блюд в заведении
     Срабатывает при сохранении модели заведения (pre_save)
     """
-    count = len(instance.dishes.values())
+    count = instance.dishes.count()
     if count > 0:
         instance.average_cost_dish = instance.get_average_cost_dish()
     else:

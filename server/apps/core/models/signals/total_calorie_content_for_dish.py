@@ -11,7 +11,7 @@ def generate_total_calorie_content(sender, instance, **kwargs):
     Срабатывает при изменении отношений моделей блюд и ингредиентов.
     Вызывает сохранение модели блюда и модели заведения, в котором есть это блюдо.
     """
-    count = len(instance.ingredients.values())
+    count = instance.ingredients.count()
     if count > 0:
         instance.total_calorie_content = instance.get_total_calorie_content()
         instance.save()
