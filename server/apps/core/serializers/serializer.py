@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.core.models import Cafe
+from apps.core.models import Cafe, Dish, Ingredient
 
 
 class CafeSerializer(serializers.ModelSerializer):
@@ -12,4 +12,18 @@ class CafeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cafe
+        fields = '__all__'
+
+
+class DishSerializer(serializers.ModelSerializer):
+    """Serializer для модели блюда"""
+    class Meta:
+        model = Dish
+        fields = '__all__'
+
+
+class IngredientSerializer(serializers.ModelSerializer):
+    """Serializer для модели ингредиента"""
+    class Meta:
+        model = Ingredient
         fields = '__all__'
