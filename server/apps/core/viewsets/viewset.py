@@ -1,10 +1,12 @@
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework import mixins
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django_filters import rest_framework as filters
 
 from apps.core.models import Cafe, Dish, Ingredient
 from apps.core.serializers import CafeSerializer, DishSerializer,\
     IngredientSerializer
+from apps.main.permissions import IsOwnerOrReadOnly, DishEditOnlyOwner
 
 
 class CafeViewSet(ModelViewSet):
@@ -13,6 +15,7 @@ class CafeViewSet(ModelViewSet):
     queryset = Cafe.objects.all()
     filter_backends = [filters.DjangoFilterBackend]
     filterset_fields = ['dishes']
+    permission_classes = [IsAuthenticatedOrReadOnly&IsOwnerOrReadOnly]
 
     def perform_create(self, serializer):
         """Сохраняет владельца в serializer"""
@@ -25,6 +28,7 @@ class DishViewSet(ModelViewSet):
     queryset = Dish.objects.all()
     filter_backends = [filters.DjangoFilterBackend]
     filterset_fields = ['cafe']
+    permission_classes = [IsAuthenticatedOrReadOnly&DishEditOnlyOwner]
 
 
 class IngredientViewSet(
@@ -40,3 +44,4 @@ class IngredientViewSet(
     queryset = Ingredient.objects.all()
     filter_backends = [filters.DjangoFilterBackend]
     filterset_fields = ['dish']
+    permission_classes = [IsAuthenticatedOrReadOnly]

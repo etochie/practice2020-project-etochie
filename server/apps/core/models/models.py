@@ -36,7 +36,8 @@ class Cafe(models.Model):
     owner = models.ForeignKey(
         'auth.User',
         on_delete=models.CASCADE,
-        verbose_name='Владелец заведения'
+        verbose_name='Владелец заведения',
+        related_name='cafes'
     )
 
     def __str__(self):
@@ -85,7 +86,9 @@ class Dish(models.Model):
     cafe = models.ForeignKey(
         Cafe,
         on_delete=models.CASCADE,
-        related_name='dishes'
+        related_name='dishes',
+        blank=True,
+        null=True
     )
     photo = models.ImageField(
         blank=True,

@@ -9,6 +9,10 @@ class CafeSerializer(serializers.ModelSerializer):
     Для выполнения условий задания в поле owner задаем source='owner.id'
     """
     owner = serializers.ReadOnlyField(source='owner.id')
+    dishes = serializers.PrimaryKeyRelatedField(
+        queryset=Dish.objects.all(),
+        many=True
+    )
 
     class Meta:
         model = Cafe
@@ -20,6 +24,7 @@ class DishSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dish
         fields = '__all__'
+        extra_kwargs = {'cafe': {'read_only': True}}
 
 
 class IngredientSerializer(serializers.ModelSerializer):
