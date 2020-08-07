@@ -36,7 +36,8 @@ class Cafe(models.Model):
     owner = models.ForeignKey(
         'auth.User',
         on_delete=models.CASCADE,
-        verbose_name='Владелец заведения'
+        verbose_name='Владелец заведения',
+        related_name='cafes'
     )
 
     def __str__(self):
