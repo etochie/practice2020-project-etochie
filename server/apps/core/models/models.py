@@ -86,9 +86,7 @@ class Dish(models.Model):
     cafe = models.ForeignKey(
         Cafe,
         on_delete=models.CASCADE,
-        related_name='dishes',
-        blank=True,
-        null=True
+        related_name='dishes'
     )
     photo = models.ImageField(
         blank=True,

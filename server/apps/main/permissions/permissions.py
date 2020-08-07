@@ -1,27 +1,34 @@
-from rest_framework.permissions import BasePermission, SAFE_METHODS
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, \
+    BasePermission, SAFE_METHODS
 
 
-class IsOwnerOrReadOnly(BasePermission):
-    """Проверяет, является ли пользователь владельцем заведения."""
+class CafeIsAuthenticatedAndOwnerOrReadOnly(IsAuthenticatedOrReadOnly):
+    """Проверяет, является ли пользователь владельцем заведения"""
+
     def has_object_permission(self, request, view, obj):
-        if request.method in SAFE_METHODS:
-            return True
+        return bool(
+            request.method in SAFE_METHODS or
+            request.user == obj.owner
+        )
 
-        return obj.owner == request.user
 
-
-class DishEditOnlyOwner(BasePermission):
+class DishIsAuthenticatedAndOwnerOrReadOnly(BasePermission):
     """
     Проверяет, является ли пользователь владельцем заведения,
     к которому привязано блюдо.
     """
+
+    def has_permission(self, request, view):
+        return bool(
+            request.method in SAFE_METHODS or
+            request.user and
+            request.user.is_authenticated and
+            request.user.cafes.filter(id=request.POST['cafe']).exists()
+        )
+
     def has_object_permission(self, request, view, obj):
-        if request.method in SAFE_METHODS:
-            return True
-        if obj.cafe:
-            user_cafes = request.user.cafes.filter()
-            return obj.cafe in user_cafes
-        # если блюдо не привязано к заведению,
-        # его могут редактировать все авторизированные пользователи
-        else:
-            return True
+        dish_cafe = obj.cafe.id
+        return bool(
+            request.method in SAFE_METHODS or
+            request.user.cafes.filter(id=dish_cafe).exists()
+        )

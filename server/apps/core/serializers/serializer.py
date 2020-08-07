@@ -24,7 +24,6 @@ class DishSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dish
         fields = '__all__'
-        extra_kwargs = {'cafe': {'read_only': True}}
 
 
 class IngredientSerializer(serializers.ModelSerializer):
