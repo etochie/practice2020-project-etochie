@@ -7,15 +7,30 @@ from config.settings.api_keys import YANDEX_GEOCODER_KEY
 
 class Cafe(models.Model):
     """Модель заведения"""
-    name = models.CharField(max_length=255)
+    name = models.CharField(
+        max_length=255,
+        verbose_name='Название заведения',
+        help_text='Введите название заведения'
+    )
     photo = models.ImageField(
         blank=True,
         verbose_name='Фотография заведения',
-        upload_to='cafe_photos'
+        upload_to='cafe_photos',
+        help_text='Загрузите фотографию заведения'
     )
-    open_hour = models.IntegerField(verbose_name='Время открытия')
-    close_hour = models.IntegerField(verbose_name='Время закрытия')
-    address = models.CharField(max_length=255, verbose_name='Адрес заведения')
+    open_hour = models.IntegerField(
+        verbose_name='Время открытия',
+        help_text='Введите время открытия заведения'
+    )
+    close_hour = models.IntegerField(
+        verbose_name='Время закрытия',
+        help_text='Введите время закрытия заведения'
+    )
+    address = models.CharField(
+        max_length=255,
+        verbose_name='Адрес заведения',
+        help_text='Введите адрес заведения. Координаты сгенерируются автоматически.'
+    )
     average_cost_dish = models.IntegerField(
         verbose_name='Средняя стоимость блюд',
         blank=True,
@@ -82,26 +97,36 @@ class Cafe(models.Model):
 
 class Dish(models.Model):
     """Модель блюда"""
-    name = models.CharField(max_length=255)
+    name = models.CharField(
+        max_length=255,
+        verbose_name='Название блюда',
+        help_text='Введите название блюда'
+    )
     cafe = models.ForeignKey(
         Cafe,
         on_delete=models.CASCADE,
-        related_name='dishes'
+        related_name='dishes',
+        help_text='Выберете заведение, к которому будет привязано это блюдо'
     )
     photo = models.ImageField(
         blank=True,
         verbose_name='Фотография блюда',
-        upload_to='dish_photos'
+        upload_to='dish_photos',
+        help_text='Загрузите фотографию блюда'
     )
     total_calorie_content = models.IntegerField(
         default=0,
         verbose_name='Суммарная калорийность блюда'
     )
-    price = models.IntegerField(verbose_name='Цена блюда')
+    price = models.IntegerField(
+        verbose_name='Цена блюда',
+        help_text='Введите цену блюда'
+    )
     ingredients = models.ManyToManyField(
         'Ingredient',
         verbose_name='Ингредиенты блюда',
-        blank=True
+        blank=True,
+        help_text='Выберете ингредиенты блюда из списка'
     )
 
     def __str__(self):
@@ -127,7 +152,10 @@ class Dish(models.Model):
 
 class Ingredient(models.Model):
     """Модель ингредиента"""
-    name = models.CharField(max_length=255)
+    name = models.CharField(
+        max_length=255,
+        verbose_name='Название ингредиента'
+    )
     calorie_content = models.IntegerField(
         default=0,
         verbose_name='Калорийность ингредиента'

@@ -1,17 +1,36 @@
-from rest_framework.viewsets import ModelViewSet, GenericViewSet
+from django.utils.decorators import method_decorator
+from django_filters import rest_framework as filters
+from drf_yasg.inspectors import CoreAPICompatInspector, NotHandled
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import mixins
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from django_filters import rest_framework as filters
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
 from apps.core.models import Cafe, Dish, Ingredient
-from apps.core.serializers import CafeSerializer, DishSerializer,\
+from apps.core.serializers import CafeSerializer, DishSerializer, \
     IngredientSerializer
 from apps.main.permissions import CafeIsAuthenticatedAndOwnerOrReadOnly, \
     DishIsAuthenticatedAndOwnerOrReadOnly
 
 
+class DjangoFilterDescriptionInspector(CoreAPICompatInspector):
+    def get_filter_parameters(self, filter_backend):
+        if isinstance(filter_backend, filters.DjangoFilterBackend):
+            result = super(DjangoFilterDescriptionInspector, self).get_filter_parameters(filter_backend)
+            for param in result:
+                if not param.get('description', ''):
+                    param.description = "Filter the returned list by {field_name}".format(field_name=param.name)
+
+            return result
+
+        return NotHandled
+
+
+@method_decorator(name='list', decorator=swagger_auto_schema(
+    filter_inspectors=[DjangoFilterDescriptionInspector]
+))
 class CafeViewSet(ModelViewSet):
-    """ViewSet модели заведения"""
+    """Cafe model ViewSet"""
     serializer_class = CafeSerializer
     queryset = Cafe.objects.all()
     filter_backends = [filters.DjangoFilterBackend]
@@ -23,8 +42,11 @@ class CafeViewSet(ModelViewSet):
         serializer.save(owner=self.request.user)
 
 
+@method_decorator(name='list', decorator=swagger_auto_schema(
+    filter_inspectors=[DjangoFilterDescriptionInspector]
+))
 class DishViewSet(ModelViewSet):
-    """ViewSet модели блюда"""
+    """Dish model ViewSet"""
     serializer_class = DishSerializer
     queryset = Dish.objects.all()
     filter_backends = [filters.DjangoFilterBackend]
@@ -32,14 +54,16 @@ class DishViewSet(ModelViewSet):
     permission_classes = [DishIsAuthenticatedAndOwnerOrReadOnly]
 
 
+@method_decorator(name='list', decorator=swagger_auto_schema(
+    filter_inspectors=[DjangoFilterDescriptionInspector]
+))
 class IngredientViewSet(
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     GenericViewSet
 ):
     """
-    ViewSet ингредиента
-    Только GET запрос
+    Ingredient model ViewSet
     """
     serializer_class = IngredientSerializer
     queryset = Ingredient.objects.all()

@@ -4,12 +4,15 @@ from django.urls import include, path
 from django.conf.urls.static import static
 
 from apps.api.routers import router
+from .urls_docs import urlpatterns as docs_url
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
 ]
+
+urlpatterns += docs_url
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
