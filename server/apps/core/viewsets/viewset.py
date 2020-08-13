@@ -14,6 +14,7 @@ from apps.main.permissions import CafeIsAuthenticatedAndOwnerOrReadOnly, \
 
 
 class DjangoFilterDescriptionInspector(CoreAPICompatInspector):
+    """Добавляет описание к полям филтрации"""
     def get_filter_parameters(self, filter_backend):
         if isinstance(filter_backend, filters.DjangoFilterBackend):
             result = super(DjangoFilterDescriptionInspector, self).get_filter_parameters(filter_backend)
