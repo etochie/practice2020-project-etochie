@@ -8,7 +8,8 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'rest_framework',
     'rest_framework.authtoken',
-    'django_filters'
+    'django_filters',
+    'drf_yasg'
 ]
 
 LOCAL_APPS = [

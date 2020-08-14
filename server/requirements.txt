@@ -16,3 +16,4 @@ yandex-geocoder==2.0.0 # Get address/coordinates via Yandex geocoder
 beautifulsoup4==4.9.1 # bs4 для парсинга ингредиентов
 lxml==4.5.2 # для работы bs4
 django-filter==2.3.0 # для работы фильтрации
+drf-yasg==1.17.0 # для документирования кода
