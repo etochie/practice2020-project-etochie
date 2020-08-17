@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.contrib.auth.hashers import make_password
 
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
@@ -16,7 +17,10 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        user = User.objects.create(**validated_data)
+        user = User.objects.create(
+            username=validated_data['username'],
+            password=make_password(validated_data['password'])
+        )
         data = self.get_initial()
         data['token'] = Token.objects.create(user=user)
         user.refresh_from_db()
