@@ -1,4 +1,5 @@
 from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django_filters import rest_framework as filters
 from drf_yasg.inspectors import CoreAPICompatInspector, NotHandled
 from drf_yasg.utils import swagger_auto_schema
@@ -30,6 +31,8 @@ class DjangoFilterDescriptionInspector(CoreAPICompatInspector):
 @method_decorator(name='list', decorator=swagger_auto_schema(
     filter_inspectors=[DjangoFilterDescriptionInspector]
 ))
+@method_decorator(name='list', decorator=cache_page(timeout=60*15))
+@method_decorator(name='retrieve', decorator=cache_page(timeout=60*15))
 class CafeViewSet(ModelViewSet):
     """Cafe model ViewSet"""
     serializer_class = CafeSerializer
