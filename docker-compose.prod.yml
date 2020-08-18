@@ -20,6 +20,7 @@ services:
             - ./server/media:/server/media
         depends_on:
             - db
+            - redis
         environment:
             DEBUG: 'False'
             DATABASE_URL: 'postgres://postgres:@db:5432/postgres'
@@ -30,3 +31,12 @@ services:
         environment:
             POSTGRES_DB: postgres
             POSTGRES_USER: postgres
+
+    redis:
+        image: "redis:6.0.6"
+
+        ports:
+            - "6379:6379"
+
+        environment:
+            - REDIS_REPLICATION_MODE=master
